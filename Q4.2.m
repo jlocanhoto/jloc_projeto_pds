@@ -49,13 +49,20 @@ magY = abs(Y);
 spec = 20*log10(magY);        % magnitude in dB
 spec = spec - max(spec);      % Normaliza a maginitude
 
+a = 1;
 n = 60;
+% Filtros FIR
 b = fir1(n, [0.04 0.35], 'stop', hamming(n+1));
 %b = fir1(n, [0.04 0.35], 'stop', hanning(n+1));
 %b = fir1(n, [0.04 0.35], 'stop', gausswin(n+1));
 %b = fir1(n, [0.04 0.35], 'stop', blackman(n+1));
 %b = fir1(n, [0.04 0.35], 'stop', kaiser(n+1, 2.5));
-filtered = filter(b, 1, y);
+
+% Filtros IIR
+%[b a] = butter(3, [0.04 0.35], 'stop');
+%[b a] = cheby1(3, 0.5, [0.04 0.35], 'stop');
+
+filtered = filter(b, a, y);
 magFiltered = abs(fft(filtered,256));
 
 figure(2);
